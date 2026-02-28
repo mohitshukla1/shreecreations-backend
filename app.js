@@ -70,7 +70,7 @@ app.get("/api/orders/:id/pdf", async (req, res) => {
     const page = await browser.newPage();
     
     // Replace this with your actual frontend invoice URL
-    https://shreecreations-frontend.onrender.com/invoice.html?id=6810da15bfdbbcff2f75fe05
+    //https://shreecreations-frontend.onrender.com/invoice.html?id=6810da15bfdbbcff2f75fe05
     const invoiceUrl = `https://shreecreations-frontend.onrender.com/invoice.html?id=${req.params.id}`;
     
     await page.goto(invoiceUrl, { waitUntil: 'networkidle0' });
