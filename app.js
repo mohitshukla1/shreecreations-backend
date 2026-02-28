@@ -22,7 +22,28 @@ url ? connectToDB(url) : console.log("Error connecting to DB");
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
-app.use(cors());
+const allowedOrigins = [
+  'https://shreecreations-frontend.onrender.com', // Your live frontend
+  'http://localhost:3000',                        // Local development
+  'http://localhost:5173'                         // Vite local development
+];
+
+// 2. Configure CORS
+app.use(cors({
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or plain curl)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true, // Allow cookies/auth headers
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 app.use("/api/items", itemRouter);
 app.use("/api/categories", categoryRouter);
