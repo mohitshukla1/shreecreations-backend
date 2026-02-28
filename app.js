@@ -11,14 +11,17 @@ const customerRouter = require("./routes/customerRoutes");
 const port = process.env.PORT || 8080;
 const bodyParser = require("body-parser");
 const app = express();
-const url = "mongodb://localhost:27017/shree_creations";
-const connectToDB = async (url) => {
-  await mongoose.connect(url);
-  console.log(`Connected to DB`);
+
+
+const connectToDB = async () => {
+  try {
+    await mongoose.connect(config.MONGODB_URI);
+    console.log(`✅ Connected to DB: ${config.MONGODB_URI.includes('cluster') ? 'Cloud' : 'Local'}`);
+  } catch (err) {
+    console.error("❌ MongoDB connection error:", err.message);
+  }
 };
-
-url ? connectToDB(url) : console.log("Error connecting to DB");
-
+connectToDB();
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server is running on port ${PORT}`);
 });
