@@ -63,13 +63,14 @@ app.get("/ping", (req, res) => res.send("pong"));
 
 
 app.get("/api/orders/:id/pdf", async (req, res) => {
-  try {
+  // try {
     const browser = await puppeteer.launch({
       args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
     const page = await browser.newPage();
     
     // Replace this with your actual frontend invoice URL
+    https://shreecreations-frontend.onrender.com/invoice.html?id=6810da15bfdbbcff2f75fe05
     const invoiceUrl = `https://shreecreations-frontend.onrender.com/invoice.html?id=${req.params.id}`;
     
     await page.goto(invoiceUrl, { waitUntil: 'networkidle0' });
@@ -79,9 +80,9 @@ app.get("/api/orders/:id/pdf", async (req, res) => {
     
     res.contentType("application/pdf");
     res.send(pdf);
-  } catch (e) {
-    res.status(500).send("Error generating PDF");
-  }
+  // } catch (e) {
+  //   res.status(500).send("Error generating PDF");
+  // }
 });
 // --- 4. STATIC FILES & FRONTEND SERVING ---
 // If you are hosting the frontend inside the backend, this serves the 'dist' folder
