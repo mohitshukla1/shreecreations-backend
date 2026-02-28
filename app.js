@@ -3,7 +3,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const config = require("./utils/config");
-
+// Install: npm install puppeteer
+const puppeteer = require('puppeteer');
 // Route Imports
 const itemRouter = require("./routes/itemRoutes");
 const categoryRouter = require("./routes/categoryRoutes");
@@ -60,6 +61,28 @@ app.use("/api/customer", customerRouter);
 // Health check route
 app.get("/ping", (req, res) => res.send("pong"));
 
+
+app.get("/api/orders/:id/pdf", async (req, res) => {
+  try {
+    const browser = await puppeteer.launch({
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
+    });
+    const page = await browser.newPage();
+    
+    // Replace this with your actual frontend invoice URL
+    const invoiceUrl = `https://shreecreations-frontend.onrender.com/invoice.html?id=${req.params.id}`;
+    
+    await page.goto(invoiceUrl, { waitUntil: 'networkidle0' });
+    const pdf = await page.pdf({ format: 'A4', printBackground: true });
+    
+    await browser.close();
+    
+    res.contentType("application/pdf");
+    res.send(pdf);
+  } catch (e) {
+    res.status(500).send("Error generating PDF");
+  }
+});
 // --- 4. STATIC FILES & FRONTEND SERVING ---
 // If you are hosting the frontend inside the backend, this serves the 'dist' folder
 app.use(express.static(path.join(__dirname, "dist")));
