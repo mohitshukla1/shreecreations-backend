@@ -1,11 +1,11 @@
 const dotenv = require("dotenv");
 dotenv.config();
 
-const PORT = 8080;
-const MONGODB_URI = "mongodb://localhost:27017/shree_creations";
-  // process.env.NODE_ENV === "test"
-  //   ? process.env.TEST_MONGODB_URI
-  //   : process.env.MONGODB_URI;
+// Use the PORT Render gives you, or default to 8080 for local testing
+const PORT = process.env.PORT || 8080;
+
+// Use the Cloud URI from Render, or fall back to your local DB
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/shree_creations";
 
 module.exports = {
   PORT,
